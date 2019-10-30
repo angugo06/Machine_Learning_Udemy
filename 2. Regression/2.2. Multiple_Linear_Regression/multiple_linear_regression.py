@@ -53,18 +53,40 @@ r2_scoreValue = r2_score(y_test, y_pred)
 # import statsmodels.formula.api as sm   # Not working
 import statsmodels.api as sm
 X = np.append(arr = np.ones((50, 1)).astype(int), values = X, axis = 1)
-X_opt = X[:, [0, 1, 2, 3, 4, 5]]
+
+'''
+# Manual back elimination 
+X_opt = X[:, [0, 1, 2, 3, 4, 5, 6]]
 regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
 regressor_OLS.summary()
+
+# for 5th index, p has highest value which is 0.608> 0.05(significance level)
+# so, we remove 5th value.
+X_opt = X[:, [0, 1, 2, 3, 4, 6]]
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
+
+# for 5th index, p has highest value which is 0.072> 0.05(significance level)
+# so, we remove 5th value.
 X_opt = X[:, [0, 1, 2, 3, 4]]
 regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
 regressor_OLS.summary()
-X_opt = X[:, [0, 3, 4, 5]]
-regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
-regressor_OLS.summary()
-X_opt = X[:, [0, 3, 5]]
-regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
-regressor_OLS.summary()
-X_opt = X[:, [0, 3]]
-regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
-regressor_OLS.summary()
+'''
+
+# Automated back elimination
+def backwardElimination(x, sl):
+    numVars = len(x[0])
+    for i in range(0, numVars):
+        regressor_OLS = sm.OLS(y, x).fit()
+        maxVar = max(regressor_OLS.pvalues).astype(float)
+        if maxVar > sl:
+            for j in range(0, numVars - i):
+                if (regressor_OLS.pvalues[j].astype(float) == maxVar):
+                    x = np.delete(x, j, 1)
+    regressor_OLS.summary()
+    return x
+ 
+SL = 0.05
+X_opt = X[:, [0, 1, 2, 3, 4, 5, 6]]
+X_Modeled = backwardElimination(X_opt, SL)
+
