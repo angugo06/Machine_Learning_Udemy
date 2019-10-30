@@ -90,3 +90,16 @@ SL = 0.05
 X_opt = X[:, [0, 1, 2, 3, 4, 5, 6]]
 X_Modeled = backwardElimination(X_opt, SL)
 
+"""
+# Build Model after back elimination
+X_train1, X_test1, y_train1, y_test1 = train_test_split(X_Modeled, y, test_size = 0.2, random_state = 0)
+regressor = LinearRegression()
+
+regressor.fit(X_train1, y_train1)
+training_score2 = regressor.score(X_train1, y_train1)
+
+# Predicting the Test set results
+y_pred1 = regressor.predict(X_test1)
+testing_score2 = regressor.score(X_test1, y_pred1)
+"""
+
