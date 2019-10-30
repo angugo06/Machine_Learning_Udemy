@@ -95,7 +95,7 @@ X_Modeled = backwardElimination(X_opt, SL)
 # Automated back elimination with p-value and adjusted-R Squard
 def backwardElimination(x, SL):
     numVars = len(x[0])
-    temp = np.zeros((50,6)).astype(int)
+    temp = np.zeros((50,7)).astype(int)
     for i in range(0, numVars):
         regressor_OLS = sm.OLS(y, x).fit()
         maxVar = max(regressor_OLS.pvalues).astype(float)
@@ -118,7 +118,7 @@ def backwardElimination(x, SL):
     return x
  
 SL = 0.05
-X_opt = X[:, [0, 1, 2, 3, 4, 5]]
+X_opt = X[:, [0, 1, 2, 3, 4, 5, 6]]
 X_Modeled = backwardElimination(X_opt, SL)
 
 
