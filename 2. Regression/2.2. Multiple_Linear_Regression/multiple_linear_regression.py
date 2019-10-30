@@ -1,4 +1,3 @@
-
 # Multiple Linear Regression
 
 # Importing the libraries
@@ -37,7 +36,7 @@ y_train = sc_y.fit_transform(y_train)"""
 # Fitting Multiple Linear Regression to the Training set
 from sklearn.linear_model import LinearRegression
 # LinearRegression(copy_X=True, fit_intercept=True, n_jobs=None, normalize=False) 
-regressor = LinearRegression(n_jobs=5)
+regressor = LinearRegression(n_jobs=2)
 
 regressor.fit(X_train, y_train)
 training_score = regressor.score(X_train, y_train)
@@ -49,3 +48,23 @@ testing_score = regressor.score(X_test, y_pred)
 from sklearn.metrics import max_error, r2_score
 maximum_score = max_error(y_test, y_pred)
 r2_scoreValue = r2_score(y_test, y_pred)
+
+# Building the optimal model using Backward Elimination
+# import statsmodels.formula.api as sm   # Not working
+import statsmodels.api as sm
+X = np.append(arr = np.ones((50, 1)).astype(int), values = X, axis = 1)
+X_opt = X[:, [0, 1, 2, 3, 4, 5]]
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
+X_opt = X[:, [0, 1, 2, 3, 4]]
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
+X_opt = X[:, [0, 3, 4, 5]]
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
+X_opt = X[:, [0, 3, 5]]
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
+X_opt = X[:, [0, 3]]
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
